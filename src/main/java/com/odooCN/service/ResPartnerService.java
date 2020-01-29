@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONObject;
@@ -32,17 +33,27 @@ public class ResPartnerService {
 	@GET
     @Path("a")
     @Produces(MediaType.APPLICATION_JSON)
-    public Object getSuppliersUsingXmlrpc() {				
-        Object results = resPartnerBean.getAllSuppliers();
+    public Object getSuppliersUsingXmlrpc(@QueryParam("id") int id) {				
+        Object results = resPartnerBean.getAllSuppliers(id);
         return results;
     }
 	
 	@GET
 	@Path("p")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void addProduct() {
-		resPartnerBean.createProduct();
+	public void addProduct(@QueryParam("id") int id) {
+		resPartnerBean.createProduct(id);
 	}
+	
+	
+	@GET
+	@Path("authenticate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object authenticate(@QueryParam("username") String username,@QueryParam("password") String password)  {
+		Object results = resPartnerBean.authenticate(username,password);
+		return results;
+	}
+	
 	
 	
 }

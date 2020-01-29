@@ -24,15 +24,13 @@ import com.odooCN.entity.ResPartner;
 public class ResPartnerBean {
 
 	
-	final String url = "http://192.168.103.99:8069",
-            db = "ProyectoEmpresa",
-      username = "carlosha98@gmail.com",
-      password = "1234";
-	//final XmlRpcClient client = new XmlRpcClient();
+
+	String database = "ProyectoEmpresa";
 	XmlRpcClient models = new XmlRpcClient();
 	final XmlRpcClientConfigImpl clientConfig = new XmlRpcClientConfigImpl();
 	final XmlRpcClientConfigImpl auth= new XmlRpcClientConfigImpl();
 	int uid;
+	String password1;
 	
 	
 	
@@ -48,34 +46,21 @@ public class ResPartnerBean {
 //	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
-	public Object getAllSuppliers () {
+	public Object getAllSuppliers (int userId) {
 		Object prueba = null;
 		List ids;
-		
-		try {
-			auth.setServerURL(
-				    new URL(String.format("%s/xmlrpc/2/common", url)));
-			 //prueba = client.execute(clientConfig, "version", emptyList());
-			 
-			clientConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
-			models.setConfig(clientConfig);
-			
-			
-			 uid = (Integer) models.execute(auth, "authenticate", asList(
-				        db, username, password, emptyMap()));
-			 
+		try {				 
 				ids = asList((Object[])models.execute("execute_kw", asList(
-					    db, uid, password,
+					    database, userId, password1,
 					    "res.partner", "search",
 					    asList(asList(
 					        asList("supplier", "=", true),
 					        asList("is_company", "=", true)))
-					)));
-				
-				
+					)));				
+	
 				prueba = models.execute(
 					    "execute_kw", asList(
-					        db, uid, password,
+					        database, userId, password1,
 					        "res.partner", "read",
 					        asList(ids),
 					        new HashMap() {{
@@ -83,8 +68,6 @@ public class ResPartnerBean {
 					        }}
 					    ));
 				
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
 		} catch (XmlRpcException e) {
 			e.printStackTrace();
 		} 
@@ -93,17 +76,11 @@ public class ResPartnerBean {
 		
 	}
 	
-	public void createProduct() {
-		try {
-			auth.setServerURL(
-				    new URL(String.format("%s/xmlrpc/2/common", url)));
-			uid = (Integer) models.execute(auth, "authenticate", asList(
-			        db, username, password, emptyMap()));
-			
-			clientConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
-			models.setConfig(clientConfig);
-			 Integer id = (Integer) models.execute("execute_kw", asList(
-						db, uid, password,
+	public void createProduct(int userId) {
+		try {									
+			 @SuppressWarnings("unchecked")
+			Integer id = (Integer) models.execute("execute_kw", asList(
+					 database, userId, password1,
 						"product.template", "create",
 						asList(new HashMap() {
 							{
@@ -114,14 +91,42 @@ public class ResPartnerBean {
 							}
 						})));
 		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		
 	}
 	
-	
+	public int authenticate(String user, String passwd) {
+		String url = "http://192.168.103.98:8069",
+	            db = "ProyectoEmpresa",
+	      username = user,
+	      password = passwd;		
+		
+		  password1= passwd;		
+		try {
+			auth.setServerURL(
+				    new URL(String.format("%s/xmlrpc/2/common", url)));
+			 
+			clientConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
+			models.setConfig(clientConfig);
+			
+			try {
+				uid = (Integer) models.execute(auth, "authenticate", asList(
+				        db, username, password, emptyMap()));		
+			} catch(ClassCastException e) {
+				uid = -1;
+			}
+			
+		} catch (MalformedURLException e) {
+
+			e.printStackTrace();
+		}
+
+		catch (XmlRpcException e) {
+
+			e.printStackTrace();
+		}
+		return uid;
+	}
 }
