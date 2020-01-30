@@ -31,7 +31,7 @@ public class ResPartnerService {
 //    }
 	
 	@GET
-    @Path("a")
+    @Path("GetSuppliers")
     @Produces(MediaType.APPLICATION_JSON)
     public Object getSuppliersUsingXmlrpc(@QueryParam("id") int id) {				
         Object results = resPartnerBean.getAllSuppliers(id);
@@ -39,7 +39,7 @@ public class ResPartnerService {
     }
 	
 	@GET
-	@Path("p")
+	@Path("WriteProduct")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void addProduct(@QueryParam("id") int id) {
 		resPartnerBean.createProduct(id);
@@ -54,6 +54,14 @@ public class ResPartnerService {
 		return results;
 	}
 	
+	
+	@GET
+    @Path("getInvoices")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Object getInvoices(@QueryParam("id") int id) {				
+        Object results = resPartnerBean.getInvoices(id);
+        return results;
+    }
 	
 	
 }

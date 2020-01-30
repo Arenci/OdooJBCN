@@ -30,9 +30,12 @@ public class ResPartnerBean {
 	final XmlRpcClientConfigImpl clientConfig = new XmlRpcClientConfigImpl();
 	final XmlRpcClientConfigImpl auth= new XmlRpcClientConfigImpl();
 	int uid;
-	String password1;
+	//String password1;
 	
-	
+	String url = "http://192.168.103.55:8069",
+            db = "ProyectoEmpresa",
+      username = "",
+      password = "";	
 	
 
 //	@PersistenceContext(unitName="OdooConnection")
@@ -47,22 +50,22 @@ public class ResPartnerBean {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 	public Object getAllSuppliers (int userId) {
-		Object prueba = null;
-		List ids;
+		Object suppliers = null;
+		List resultsIds;
 		try {				 
-				ids = asList((Object[])models.execute("execute_kw", asList(
-					    database, userId, password1,
+				resultsIds = asList((Object[])models.execute("execute_kw", asList(
+					    database, userId, password,
 					    "res.partner", "search",
 					    asList(asList(
 					        asList("supplier", "=", true),
 					        asList("is_company", "=", true)))
 					)));				
 	
-				prueba = models.execute(
+				suppliers = models.execute(
 					    "execute_kw", asList(
-					        database, userId, password1,
+					        database, userId, password,
 					        "res.partner", "read",
-					        asList(ids),
+					        asList(resultsIds),
 					        new HashMap() {{
 					            put("fields", asList("name"));
 					        }}
@@ -72,7 +75,7 @@ public class ResPartnerBean {
 			e.printStackTrace();
 		} 
 		
-		return prueba;
+		return suppliers;
 		
 	}
 	
@@ -80,7 +83,7 @@ public class ResPartnerBean {
 		try {									
 			 @SuppressWarnings("unchecked")
 			Integer id = (Integer) models.execute("execute_kw", asList(
-					 database, userId, password1,
+					 database, userId, password,
 						"product.template", "create",
 						asList(new HashMap() {
 							{
@@ -97,13 +100,46 @@ public class ResPartnerBean {
 		
 	}
 	
-	public int authenticate(String user, String passwd) {
-		String url = "http://192.168.103.98:8069",
-	            db = "ProyectoEmpresa",
-	      username = user,
-	      password = passwd;		
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public Object getInvoices(int userId) {
+		List resultsIds;
+		Object invoices = null;
+
+			try {
+				resultsIds = asList((Object[])models.execute("execute_kw", asList(
+					    database, userId, password,
+					    "account.invoice", "search",
+					    asList(asList())
+					)));
+				
+				
+				invoices = models.execute(
+					    "execute_kw", asList(
+					        database, userId, password,
+					        "account.invoice", "read",
+					        asList(resultsIds),
+					        new HashMap() {{
+					            put("fields", asList("vendor_display_name","type","amount_untaxed","amount_tax","amount_total"));
+					        }}
+					    ));
+				//account_invoice_line
+			} catch (XmlRpcException e) {
+
+				e.printStackTrace();
+			}				
 		
-		  password1= passwd;		
+		return invoices;
+		
+	}
+	
+	
+	public int authenticate(String user, String passwd) {
+		
+	      username = user;
+	      password = passwd;				 	
 		try {
 			auth.setServerURL(
 				    new URL(String.format("%s/xmlrpc/2/common", url)));
