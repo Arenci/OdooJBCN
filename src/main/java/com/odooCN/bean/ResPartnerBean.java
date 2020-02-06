@@ -24,17 +24,17 @@ import com.odooCN.entity.ResPartner;
 public class ResPartnerBean {
 
 	
-	final String url = "http://192.168.103.99:8069",
-            db = "ProyectoEmpresa",
-      username = "carlosha98@gmail.com",
-      password = "1234";
-	//final XmlRpcClient client = new XmlRpcClient();
+
+	String database = "ProyectoEmpresa";
 	XmlRpcClient models = new XmlRpcClient();
 	final XmlRpcClientConfigImpl clientConfig = new XmlRpcClientConfigImpl();
 	final XmlRpcClientConfigImpl auth= new XmlRpcClientConfigImpl();
 	int uid;
 	
-	
+	String url = "http://192.168.103.77:8069",
+            db = "ProyectoEmpresa",
+      username = "",
+      password = "";	
 	
 
 //	@PersistenceContext(unitName="OdooConnection")
@@ -46,82 +46,134 @@ public class ResPartnerBean {
 //        List<ResPartner> results = q.getResultList();
 //        return results;
 //	}
-	
 	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
-	public Object getAllSuppliers () {
-		Object prueba = null;
-		List ids;
-		
-		try {
-			auth.setServerURL(
-				    new URL(String.format("%s/xmlrpc/2/common", url)));
-			 //prueba = client.execute(clientConfig, "version", emptyList());
-			 
-			clientConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
-			models.setConfig(clientConfig);
-			
-			
-			 uid = (Integer) models.execute(auth, "authenticate", asList(
-				        db, username, password, emptyMap()));
-			 
-				ids = asList((Object[])models.execute("execute_kw", asList(
-					    db, uid, password,
+	public Object getAllSuppliers (int userId) {
+		Object suppliers = null;
+		List resultsIds;
+		try {				 
+				resultsIds = asList((Object[])models.execute("execute_kw", asList(
+					    database, userId, password,
 					    "res.partner", "search",
 					    asList(asList(
 					        asList("supplier", "=", true),
 					        asList("is_company", "=", true)))
-					)));
-				
-				
-				prueba = models.execute(
+					)));				
+	
+				suppliers = models.execute(
 					    "execute_kw", asList(
-					        db, uid, password,
+					        database, userId, password,
 					        "res.partner", "read",
-					        asList(ids),
+					        asList(resultsIds),
 					        new HashMap() {{
 					            put("fields", asList("name"));
 					        }}
 					    ));
 				
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
 		} catch (XmlRpcException e) {
 			e.printStackTrace();
 		} 
 		
-		return prueba;
+		return suppliers;
 		
 	}
 	
-	public void createProduct() {
+//	public void createProduct(int userId) {
+//		try {									
+//			 @SuppressWarnings("unchecked")
+//			Integer id = (Integer) models.execute("execute_kw", asList(
+//					 database, userId, password,
+//						"product.template", "create",
+//						asList(new HashMap() {
+//							{
+//								put("name", "Chair");
+//								put("description", "It's a chair");
+//								put("type", "service");
+//								put("list_price", 14.9); 
+//							}
+//						})));
+//		} catch (XmlRpcException e) {
+//
+//			e.printStackTrace();
+//		}
+//		
+//	}
+	@SuppressWarnings("unchecked")
+	public Object getInvoices(int userId) throws MalformedURLException {
+		//account_invoice_line
+		List resultsIds;
+		Object invoices = null;
+		String passwordAux = "1234";
+		auth.setServerURL(
+			    new URL(String.format("%s/xmlrpc/2/common", url)));
+		 
+		clientConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
+		models.setConfig(clientConfig);
+			try {
+				resultsIds = asList((Object[])models.execute("execute_kw", asList(
+					    database, userId, passwordAux,
+					    "account.invoice", "search",
+					    asList(asList())
+					)));
+				
+				
+				invoices = models.execute(
+					    "execute_kw", asList(
+					        database, userId, passwordAux,
+					        "account.invoice", "read",
+					        asList(resultsIds),
+					        new HashMap() {{
+					            put("fields", asList("vendor_display_name"));
+					        }}
+					    ));
+				//account_invoice_line
+			} catch (XmlRpcException e) {
+
+				e.printStackTrace();
+			}				
+		
+		return invoices;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void deleteInvoice(int userId, int invoiceId) {		
+		try {
+			models.execute("execute_kw", asList(
+				    db, uid, password,
+				    "account.invoice", "unlink",
+				    asList(asList(invoiceId))));
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public int authenticate(String user, String passwd) {
+	      username = user;
+	      password = passwd;				 	
 		try {
 			auth.setServerURL(
 				    new URL(String.format("%s/xmlrpc/2/common", url)));
-			uid = (Integer) models.execute(auth, "authenticate", asList(
-			        db, username, password, emptyMap()));
-			
+			 
 			clientConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
 			models.setConfig(clientConfig);
-			 Integer id = (Integer) models.execute("execute_kw", asList(
-						db, uid, password,
-						"product.template", "create",
-						asList(new HashMap() {
-							{
-								put("name", "Chair");
-								put("description", "It's a chair");
-								put("type", "service");
-								put("list_price", 14.9); 
-							}
-						})));
-		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			try {
+				uid = (Integer) models.execute(auth, "authenticate", asList(
+				        db, username, password, emptyMap()));		
+			} catch(ClassCastException e) {
+				uid = -1;
+			}
+			
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
-		
+
+		catch (XmlRpcException e) {
+
+			e.printStackTrace();
+		}
+		return uid;
 	}
-	
-	
 }
