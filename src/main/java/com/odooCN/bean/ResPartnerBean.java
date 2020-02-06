@@ -30,9 +30,8 @@ public class ResPartnerBean {
 	final XmlRpcClientConfigImpl clientConfig = new XmlRpcClientConfigImpl();
 	final XmlRpcClientConfigImpl auth= new XmlRpcClientConfigImpl();
 	int uid;
-	//String password1;
 	
-	String url = "http://192.168.103.55:8069",
+	String url = "http://192.168.103.77:8069",
             db = "ProyectoEmpresa",
       username = "",
       password = "";	
@@ -47,7 +46,6 @@ public class ResPartnerBean {
 //        List<ResPartner> results = q.getResultList();
 //        return results;
 //	}
-	
 	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 	public Object getAllSuppliers (int userId) {
 		Object suppliers = null;
@@ -79,38 +77,40 @@ public class ResPartnerBean {
 		
 	}
 	
-	public void createProduct(int userId) {
-		try {									
-			 @SuppressWarnings("unchecked")
-			Integer id = (Integer) models.execute("execute_kw", asList(
-					 database, userId, password,
-						"product.template", "create",
-						asList(new HashMap() {
-							{
-								put("name", "Chair");
-								put("description", "It's a chair");
-								put("type", "service");
-								put("list_price", 14.9); 
-							}
-						})));
-		} catch (XmlRpcException e) {
-
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	
-	
+//	public void createProduct(int userId) {
+//		try {									
+//			 @SuppressWarnings("unchecked")
+//			Integer id = (Integer) models.execute("execute_kw", asList(
+//					 database, userId, password,
+//						"product.template", "create",
+//						asList(new HashMap() {
+//							{
+//								put("name", "Chair");
+//								put("description", "It's a chair");
+//								put("type", "service");
+//								put("list_price", 14.9); 
+//							}
+//						})));
+//		} catch (XmlRpcException e) {
+//
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	@SuppressWarnings("unchecked")
-	public Object getInvoices(int userId) {
+	public Object getInvoices(int userId) throws MalformedURLException {
+		//account_invoice_line
 		List resultsIds;
 		Object invoices = null;
-
+		String passwordAux = "1234";
+		auth.setServerURL(
+			    new URL(String.format("%s/xmlrpc/2/common", url)));
+		 
+		clientConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
+		models.setConfig(clientConfig);
 			try {
 				resultsIds = asList((Object[])models.execute("execute_kw", asList(
-					    database, userId, password,
+					    database, userId, passwordAux,
 					    "account.invoice", "search",
 					    asList(asList())
 					)));
@@ -118,11 +118,11 @@ public class ResPartnerBean {
 				
 				invoices = models.execute(
 					    "execute_kw", asList(
-					        database, userId, password,
+					        database, userId, passwordAux,
 					        "account.invoice", "read",
 					        asList(resultsIds),
 					        new HashMap() {{
-					            put("fields", asList("vendor_display_name","type","amount_untaxed","amount_tax","amount_total"));
+					            put("fields", asList("vendor_display_name"));
 					        }}
 					    ));
 				//account_invoice_line
@@ -135,9 +135,20 @@ public class ResPartnerBean {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
+	public void deleteInvoice(int userId, int invoiceId) {		
+		try {
+			models.execute("execute_kw", asList(
+				    db, uid, password,
+				    "account.invoice", "unlink",
+				    asList(asList(invoiceId))));
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public int authenticate(String user, String passwd) {
-		
 	      username = user;
 	      password = passwd;				 	
 		try {
