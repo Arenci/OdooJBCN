@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.odooCN.bean.InvoiceBean;
 import com.odooCN.entity.AuthConfig;
+import com.odooCN.entity.Invoice;
 
 
 @Path("supplier")
@@ -28,20 +29,12 @@ public class InvoiceService {
 	InvoiceBean resPartnerBean;	
 	
 	private final String status = "{\"status\":\"ok\"}";
-	
-//	@GET
-//    @Path("getAllSuppliers")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<ResPartner> getSuppliers() {				
-//        List<ResPartner> results = resPartnerBean.getSuppliers();
-//        return results;
-//    }
-	
+
 	@GET
     @Path("getSuppliers")
     @Produces(MediaType.APPLICATION_JSON)
-    public Object getSuppliersUsingXmlrpc(@QueryParam("id") int id) {				
-        Object results = resPartnerBean.getAllSuppliers(id);
+    public Object getSuppliersUsingXmlrpc(@QueryParam("userId") int userId) {				
+        Object results = resPartnerBean.getAllSuppliers(userId);
         return results;
     }
 	
@@ -84,8 +77,8 @@ public class InvoiceService {
 	@Path("updateInvoice")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateInvoice(@QueryParam("userId") int userId, @QueryParam("invoiceId") int invoiceId) {
-		resPartnerBean.updateInvoice(userId, invoiceId);
+	public Response updateInvoice(@QueryParam("userId") int userId, Invoice invoice) {
+		resPartnerBean.updateInvoice(userId, invoice);
 		return Response.status(200).entity(status).type(MediaType.APPLICATION_JSON).build();
 	}
 	

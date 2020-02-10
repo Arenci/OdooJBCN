@@ -18,6 +18,7 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 import com.odooCN.entity.AuthConfig;
+import com.odooCN.entity.Invoice;
 import com.odooCN.entity.User;
 
 
@@ -101,7 +102,7 @@ public class InvoiceBean {
                             "account.invoice", "read",
                             asList(resultsIds),
                             new HashMap() {{
-                                put("fields", asList("vendor_display_name"));
+                                put("fields", asList("vendor_display_name","date_invoice","date_due","amount_untaxed","amount_tax","amount_total"));
                             }}
                         ));
                 //account_invoice_line
@@ -128,18 +129,26 @@ public class InvoiceBean {
         }
     }
     
-    public void updateInvoice(int userId, int invoiceId) {
+    @SuppressWarnings("unchecked")
+	public void updateInvoice(int userId, final Invoice invoice) {
     	AuthConfig authConfig = new AuthConfig();       
         XmlRpcClient client = authConfig.setModelConfiguration();
         User user = authConfig.getUser();
-        
         try {
 			client.execute("execute_kw", asList(
 				    database, userId, user.getPassword(),
 				    "account.invoice", "write",
 				    asList(
-				        asList(invoiceId),
-				        new HashMap() {{ put("date_due", "2020-01-29"); }}
+				        asList(invoice.getInvoiceId()),
+				        
+				        new HashMap() {{  put("vendor_display_name", invoice.getVendorDisplayName());
+				        				  put("date_due", invoice.getDate_due());
+				        				  put("date_invoice", invoice.getDate_invoice());
+				        				  put("amount_untaxed",invoice.getAmount_untaxed());
+				        				  put("amount_tax",invoice.getAmount_tax());
+				        				  put("amount_total",invoice.getAmount_total());
+				        				
+				        }}
 				    )
 				));
 		} catch (XmlRpcException e) {
