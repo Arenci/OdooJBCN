@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -16,14 +17,15 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
-import com.odooCN.bean.ResPartnerBean;
-import com.odooCN.entity.ResPartner;
+import com.odooCN.bean.InvoiceBean;
+import com.odooCN.entity.AuthConfig;
+
 
 @Path("supplier")
-public class ResPartnerService {
+public class InvoiceService {
 	
 	@EJB
-	ResPartnerBean resPartnerBean;	
+	InvoiceBean resPartnerBean;	
 	
 	private final String status = "{\"status\":\"ok\"}";
 	
@@ -55,7 +57,8 @@ public class ResPartnerService {
 	@Path("authenticate")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Object authenticate(@QueryParam("username") String username,@QueryParam("password") String password)  {
-		Object results = resPartnerBean.authenticate(username,password);
+		AuthConfig authConfig = new AuthConfig();
+		Object results = authConfig.authenticate(username, password);
 		return results;
 	}
 	
@@ -74,6 +77,15 @@ public class ResPartnerService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteInvoice(@QueryParam("userId") int userId, @QueryParam("invoiceId") int invoiceId) {
 		resPartnerBean.deleteInvoice(userId, invoiceId);
+		return Response.status(200).entity(status).type(MediaType.APPLICATION_JSON).build();
+	}
+	
+	@PUT
+	@Path("updateInvoice")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateInvoice(@QueryParam("userId") int userId, @QueryParam("invoiceId") int invoiceId) {
+		resPartnerBean.updateInvoice(userId, invoiceId);
 		return Response.status(200).entity(status).type(MediaType.APPLICATION_JSON).build();
 	}
 	
