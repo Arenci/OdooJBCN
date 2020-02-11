@@ -91,21 +91,12 @@ public class InvoiceBean {
         User user = authConfig.getUser();
 
             try {
-                resultsIds = asList((Object[])client.execute("execute_kw", asList(
+                invoices = asList((Object[])client.execute("execute_kw", asList(
                         database, userId, passwordAux,
-                        "account.invoice", "search",
+                        "account.invoice", "search_read",
                         asList(asList())
-                    )));              
-                invoices = client.execute(
-                        "execute_kw", asList(
-                            database, userId, passwordAux,
-                            "account.invoice", "read",
-                            asList(resultsIds),
-                            new HashMap() {{
-                                put("fields", asList("vendor_display_name","date_invoice","date_due","amount_untaxed","amount_tax","amount_total"));
-                            }}
-                        ));
-                //account_invoice_line
+                    )));                             
+//                //account_invoice_line
             } catch (XmlRpcException e) {
                 e.printStackTrace();
             }               
@@ -157,6 +148,29 @@ public class InvoiceBean {
 		}
     }
     
+    public void createInvoice(int userId) {
+    	AuthConfig authConfig = new AuthConfig();       
+        XmlRpcClient client = authConfig.setModelConfiguration();
+        User user = authConfig.getUser();
+    	 try {                                   
+          @SuppressWarnings("unchecked")
+          Integer id = (Integer) client.execute("execute_kw", asList(
+                   database, userId, user.getPassword(),
+                      "account.invoice.line", "create",
+                      asList(new HashMap() {
+                          {
+                              put("name", "[E-COM11] Cabinet with Doors");
+                              put("invoice_id", 3);
+                              put("product_id", 15);
+                              put("price_unit", 14); 
+                              put("account_id",480);
+                          }
+                      })));
+      } catch (XmlRpcException e) {
+
+          e.printStackTrace();
+      }
+    }
     
 
 }

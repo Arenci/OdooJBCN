@@ -40,7 +40,7 @@ public class ClientBean {
                             "res.partner", "read",
                             asList(resultsIds),
                             new HashMap() {{
-                                put("fields", asList("name","website","street","vat","phone","email"));
+                                put("fields", asList("name","website","street","vat","phone","email","image"));
                             }}
                         ));
         } catch (XmlRpcException e) {
