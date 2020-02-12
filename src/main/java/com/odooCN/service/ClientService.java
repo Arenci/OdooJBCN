@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.odooCN.bean.ClientBean;
 
-@Path("Customer")
+@Path("customer")
 public class ClientService {
 	
 	@EJB

@@ -31,6 +31,8 @@ public class AuthConfig {
     	XmlRpcClientConfigImpl clientConfig = new XmlRpcClientConfigImpl();
     	try {
 			clientConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
+			clientConfig.setEnabledForExtensions(true);
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

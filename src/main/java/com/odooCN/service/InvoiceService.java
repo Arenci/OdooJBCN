@@ -82,11 +82,11 @@ public class InvoiceService {
 		return Response.status(200).entity(status).type(MediaType.APPLICATION_JSON).build();
 	}
 	
-	@GET
+	@POST
 	@Path("createInvoice")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void createInvoice(@QueryParam("userId") int userId) {
-		resPartnerBean.createInvoice(userId);
+	public void createInvoice(@QueryParam("userId") int userId, Invoice invoice) {
+		resPartnerBean.createInvoice(userId, invoice);
 	}
 	
 }

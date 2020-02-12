@@ -82,17 +82,14 @@ public class InvoiceBean {
 //  }
     @SuppressWarnings("unchecked")
     public Object getInvoices(int userId) throws MalformedURLException {
-        //account_invoice_line
-        List resultsIds;
         Object invoices = null;
-        String passwordAux = "1234";
         AuthConfig authConfig = new AuthConfig();       
         XmlRpcClient client = authConfig.setModelConfiguration();
         User user = authConfig.getUser();
 
             try {
                 invoices = asList((Object[])client.execute("execute_kw", asList(
-                        database, userId, passwordAux,
+                        database, userId, user.getPassword(),
                         "account.invoice", "search_read",
                         asList(asList())
                     )));                             
@@ -148,7 +145,7 @@ public class InvoiceBean {
 		}
     }
     
-    public void createInvoice(int userId) {
+    public void createInvoice(int userId, final Invoice invoice) {
     	AuthConfig authConfig = new AuthConfig();       
         XmlRpcClient client = authConfig.setModelConfiguration();
         User user = authConfig.getUser();
@@ -156,14 +153,16 @@ public class InvoiceBean {
           @SuppressWarnings("unchecked")
           Integer id = (Integer) client.execute("execute_kw", asList(
                    database, userId, user.getPassword(),
-                      "account.invoice.line", "create",
+                      "account.invoice", "create",
                       asList(new HashMap() {
                           {
-                              put("name", "[E-COM11] Cabinet with Doors");
-                              put("invoice_id", 3);
-                              put("product_id", 15);
-                              put("price_unit", 14); 
-                              put("account_id",480);
+                              put("partner_id", invoice.getPartner_id());
+                              put("vendor_display_name", invoice.getVendorDisplayName());
+                              put("date_due", invoice.getDate_due());
+                              put("date_invoice", invoice.getDate_invoice());
+                              put("amount_tax", invoice.getAmount_tax());
+                              put("amount_untaxed", invoice.getAmount_untaxed());
+                              put("amount_total", invoice.getAmount_total());
                           }
                       })));
       } catch (XmlRpcException e) {

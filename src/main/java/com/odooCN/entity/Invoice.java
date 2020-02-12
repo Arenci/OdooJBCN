@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class Invoice {
 	int invoiceId;
+	int partner_id;
 	String vendorDisplayName;
 	String date_invoice;
 	String date_due;
@@ -13,7 +14,7 @@ public class Invoice {
 	float amount_total;
 	
 	public Invoice(int invoiceId, String vendorDisplayName, String date_invoice, String date_due,
-			float amount_untaxed, float amount_tax, float amount_total) {
+			float amount_untaxed, float amount_tax, float amount_total, int partner_id) {
 		this.invoiceId = invoiceId;
 		this.vendorDisplayName = vendorDisplayName;
 		this.date_invoice = date_invoice;
@@ -21,6 +22,7 @@ public class Invoice {
 		this.amount_untaxed = amount_untaxed;
 		this.amount_tax = amount_tax;
 		this.amount_total = amount_total;
+		this.partner_id = partner_id;
 	}
 
 	
@@ -83,6 +85,16 @@ public class Invoice {
 
 	public void setAmount_total(float amount_total) {
 		this.amount_total = amount_total;
+	}
+
+
+	public int getPartner_id() {
+		return partner_id;
+	}
+
+
+	public void setPartner_id(int partner_id) {
+		this.partner_id = partner_id;
 	}
 	
 	
