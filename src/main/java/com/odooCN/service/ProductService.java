@@ -82,8 +82,8 @@ public class ProductService {
 	@GET
 	@Path("getProductById")
     @Produces(MediaType.APPLICATION_JSON)
-	public Object getProductById(@QueryParam("userId") int userId, @QueryParam("productId") int productId) {
-		Object results = productBean.getProductById(userId, productId);
+	public Object getProductById(@QueryParam("userId") int userId, @QueryParam("productId") int productId, @QueryParam("locationId") int locationId) {
+		Object results = productBean.getProductById(userId, productId, locationId);
 		return results;
 	}
 	

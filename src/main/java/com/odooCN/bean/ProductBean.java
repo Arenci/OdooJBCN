@@ -165,7 +165,7 @@ public class ProductBean {
 		return warehouses;
 	}
 	
-	public Object getProductById(int userId, int productId) {
+	public Object getProductById(int userId, int productId, int locationId) {
 		Object product = null;
 		AuthConfig authConfig = new AuthConfig();       
         XmlRpcClient client = authConfig.setModelConfiguration();
@@ -173,9 +173,10 @@ public class ProductBean {
         try {
         	product = asList((Object[])client.execute("execute_kw", asList(
                     database, userId, user.getPassword(),
-                    "product.product", "search_read", 
+                    "stock.quant", "search_read", 
                     asList(asList(
-                    		asList("id","=", productId)))                  		
+                    		asList("product_id","=", productId),
+                    		asList("location_id", "=",locationId)))                  		
                 )));                
         } catch (XmlRpcException e) {
             e.printStackTrace();
