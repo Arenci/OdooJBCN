@@ -130,6 +130,7 @@ public class InvoiceBean {
 				        asList(invoice.getInvoiceId()),
 				        
 				        new HashMap() {{  put("vendor_display_name", invoice.getVendorDisplayName());
+				        				  put("partner_id", invoice.getPartner_id());
 				        				  put("date_due", invoice.getDate_due());
 				        				  put("date_invoice", invoice.getDate_invoice());
 				        				  put("amount_untaxed",invoice.getAmount_untaxed());
@@ -169,6 +170,24 @@ public class InvoiceBean {
 
           e.printStackTrace();
       }
+    }
+    
+    public Object getInvoiceById(int userId, int invoiceId) {
+    	AuthConfig authConfig = new AuthConfig();       
+        XmlRpcClient client = authConfig.setModelConfiguration();
+        User user = authConfig.getUser();
+        Object invoice = null;
+        try {
+        	invoice = client.execute("execute_kw", asList(
+			        database, userId, user.getPassword(),
+			        "account.invoice", "search_read",
+			        asList(asList(
+			        		asList("id","=", invoiceId)))));
+		} catch (XmlRpcException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return invoice;
     }
     
 

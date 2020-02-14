@@ -22,7 +22,7 @@ import com.odooCN.entity.AuthConfig;
 import com.odooCN.entity.Invoice;
 
 
-@Path("supplier")
+@Path("invoice")
 public class InvoiceService {
 	
 	@EJB
@@ -85,8 +85,17 @@ public class InvoiceService {
 	@POST
 	@Path("createInvoice")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void createInvoice(@QueryParam("userId") int userId, Invoice invoice) {
+	public Response createInvoice(@QueryParam("userId") int userId, Invoice invoice) {
 		resPartnerBean.createInvoice(userId, invoice);
+		return Response.status(200).entity(status).type(MediaType.APPLICATION_JSON).build();
 	}
+	
+	@GET
+    @Path("getInvoice")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Object getInvoice(@QueryParam("userId") int userId, @QueryParam("invoiceId") int invoiceId) throws MalformedURLException {				
+        Object results = resPartnerBean.getInvoiceById(userId, invoiceId);
+        return results;
+    }
 	
 }

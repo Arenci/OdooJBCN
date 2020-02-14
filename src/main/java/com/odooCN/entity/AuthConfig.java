@@ -12,7 +12,7 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 public class AuthConfig {
     static User user;
-    String url = "http://192.168.203.58:8069",
+    String url = "http://192.168.1.44:8069",
             db = "ProyectoEmpresa";
 
     private XmlRpcClientConfigImpl authConfiguration() {
