@@ -41,7 +41,7 @@ public class ProductBean {
                         "account.invoice.line", "read",
                         asList(ids),
                         new HashMap() {{
-                            put("fields", asList("id","name","price_unit","price_total","quantity"));
+                            put("fields", asList("product_id","id","name","price_unit","price_total","quantity"));
                         }}
                     ));
 		} catch (XmlRpcException e) {
