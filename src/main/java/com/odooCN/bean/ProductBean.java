@@ -126,21 +126,60 @@ public class ProductBean {
         }
 	}
 	
-	public Object getAllProductsFromWarehouse(int userId) {
-		Object products = null;
+	public Object getAllShelvesFromWarehouse(int userId, int  warehouseId) {
+		Object shelves = null;
 		AuthConfig authConfig = new AuthConfig();       
         XmlRpcClient client = authConfig.setModelConfiguration();
         User user = authConfig.getUser();
         
         try {
-            products = asList((Object[])client.execute("execute_kw", asList(
+        	shelves = asList((Object[])client.execute("execute_kw", asList(
                     database, userId, user.getPassword(),
-                    "product.product", "search_read",
-                    asList(asList())                  		
+                    "stock.location", "search_read", 
+                    asList(asList(
+                    		asList("location_id","=", warehouseId)))                  		
                 )));                
         } catch (XmlRpcException e) {
             e.printStackTrace();
         }               
-		return products;
+		return shelves;
+	}
+	
+	public Object getWarehouses(int userId) {
+		Object warehouses = null;
+		AuthConfig authConfig = new AuthConfig();       
+        XmlRpcClient client = authConfig.setModelConfiguration();
+        User user = authConfig.getUser();
+        
+        try {
+			warehouses = asList((Object[])client.execute("execute_kw", asList(
+			        database, userId, user.getPassword(),
+			        "stock.warehouse", "search_read", 
+			        asList(asList())                  		
+			    )));
+		} catch (XmlRpcException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}          
+        
+		return warehouses;
+	}
+	
+	public Object getProductById(int userId, int productId) {
+		Object product = null;
+		AuthConfig authConfig = new AuthConfig();       
+        XmlRpcClient client = authConfig.setModelConfiguration();
+        User user = authConfig.getUser();
+        try {
+        	product = asList((Object[])client.execute("execute_kw", asList(
+                    database, userId, user.getPassword(),
+                    "product.product", "search_read", 
+                    asList(asList(
+                    		asList("id","=", productId)))                  		
+                )));                
+        } catch (XmlRpcException e) {
+            e.printStackTrace();
+        }               
+		return product;
 	}
 }

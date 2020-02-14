@@ -64,10 +64,26 @@ public class ProductService {
 	}
 	
 	@GET
-	@Path("getProductsFromWarehouse")
+	@Path("getAllShelvesFromWarehouse")
     @Produces(MediaType.APPLICATION_JSON)
-	public Object getProductsFromWarehouse(@QueryParam("userId") int userId) {
-		Object results = productBean.getAllProductsFromWarehouse(userId);
+	public Object getProductsFromWarehouse(@QueryParam("userId") int userId, @QueryParam("warehouseId") int warehouseId) {
+		Object results = productBean.getAllShelvesFromWarehouse(userId, warehouseId);
+		return results;
+	}
+	
+	@GET
+	@Path("getWarehouses")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Object getWarehouses(@QueryParam("userId") int userId) {
+		Object results = productBean.getWarehouses(userId);
+		return results;
+	}
+	
+	@GET
+	@Path("getProductById")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Object getProductById(@QueryParam("userId") int userId, @QueryParam("productId") int productId) {
+		Object results = productBean.getProductById(userId, productId);
 		return results;
 	}
 	
