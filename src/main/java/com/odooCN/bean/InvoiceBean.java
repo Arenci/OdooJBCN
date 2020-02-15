@@ -25,7 +25,8 @@ import com.odooCN.entity.User;
 @Stateless
 public class InvoiceBean {
 	String database = "ProyectoEmpresa";
-
+	private final String status = "{\"status\":\"ok\"}";
+	
     @SuppressWarnings({ "unchecked", "rawtypes", "serial" })
     public Object getAllSuppliers (int userId) {
         Object suppliers = null;
@@ -60,26 +61,7 @@ public class InvoiceBean {
         
     }
     
-//  public void createProduct(int userId) {
-//      try {                                   
-//           @SuppressWarnings("unchecked")
-//          Integer id = (Integer) models.execute("execute_kw", asList(
-//                   database, userId, password,
-//                      "product.template", "create",
-//                      asList(new HashMap() {
-//                          {
-//                              put("name", "Chair");
-//                              put("description", "It's a chair");
-//                              put("type", "service");
-//                              put("list_price", 14.9); 
-//                          }
-//                      })));
-//      } catch (XmlRpcException e) {
-//
-//          e.printStackTrace();
-//      }
-//      
-//  }
+
     @SuppressWarnings("unchecked")
     public Object getInvoices(int userId) throws MalformedURLException {
         Object invoices = null;
@@ -103,7 +85,7 @@ public class InvoiceBean {
     }
     
     @SuppressWarnings("unchecked")
-    public void deleteInvoice(int userId, int invoiceId) {      
+    public String deleteInvoice(int userId, int invoiceId) {      
     	AuthConfig authConfig = new AuthConfig();       
         XmlRpcClient client = authConfig.setModelConfiguration();
         User user = authConfig.getUser();
@@ -112,9 +94,11 @@ public class InvoiceBean {
                     database, userId, user.getPassword(),
                     "account.invoice", "unlink",
                     asList(asList(invoiceId))));
+        	return status;
         } catch (XmlRpcException e) {
             e.printStackTrace();
-        }
+            return "Mal";        }
+        
     }
     
     @SuppressWarnings("unchecked")

@@ -17,6 +17,7 @@ import java.util.List;
 @Stateless
 public class ProductBean {
 	String database = "ProyectoEmpresa";
+	private final String status = "{\"status\":\"ok\"}";
 	
 	public Object getAllProductsFromInvoice(int userId, int invoiceId) {
 		AuthConfig authConfig = new AuthConfig();       
@@ -112,7 +113,8 @@ public class ProductBean {
 		}
 	}
 	
-	public void deleteProductFromInvoice(int userId, int invoiceLineId) {
+	public String deleteProductFromInvoice(int userId, int invoiceLineId) {
+		
 		AuthConfig authConfig = new AuthConfig();       
         XmlRpcClient client = authConfig.setModelConfiguration();
         User user = authConfig.getUser();
@@ -121,9 +123,13 @@ public class ProductBean {
                     database, userId, user.getPassword(),
                     "account.invoice.line", "unlink",
                     asList(asList(invoiceLineId))));
+        	return status;
         } catch (XmlRpcException e) {
             e.printStackTrace();
+           return "Mal";
         }
+       
+        
 	}
 	
 	public Object getAllShelvesFromWarehouse(int userId, int  warehouseId) {
