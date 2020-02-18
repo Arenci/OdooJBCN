@@ -98,4 +98,12 @@ public class InvoiceService {
         return results;
     }
 	
+	@GET
+    @Path("getInvoicesByCustomer")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Object getInvoiceByCustomer(@QueryParam("userId") int userId, @QueryParam("customerId") int customerId) throws MalformedURLException {				
+        Object results = resPartnerBean.getInvoicesByCustomer(userId, customerId);
+        return results;
+    }
+	
 }

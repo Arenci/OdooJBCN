@@ -174,5 +174,23 @@ public class InvoiceBean {
     	return invoice;
     }
     
+    public Object getInvoicesByCustomer(int userId, int customerId) {
+    	AuthConfig authConfig = new AuthConfig();       
+        XmlRpcClient client = authConfig.setModelConfiguration();
+        User user = authConfig.getUser();
+        Object invoices = null;
+        try {
+        	invoices = client.execute("execute_kw", asList(
+			        database, userId, user.getPassword(),
+			        "account.invoice", "search_read",
+			        asList(asList(
+			        		asList("partner_id","=", customerId)))));
+		} catch (XmlRpcException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return invoices;
+    }
+    
 
 }
