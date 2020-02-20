@@ -34,8 +34,7 @@ public class ProductBean {
 			           ))
 			    )));
 			
-			
-
+		
             products = client.execute(
                     "execute_kw", asList(
                         database, userId, user.getPassword(),

@@ -1,0 +1,57 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        
+    <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+		<!-- Popper JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		
+		<!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="script/script.js"></script>
+<title>Page Title</title>
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+    <div class="topnav">
+        <a href="#" >Producto</a>
+        <!-- Navigation links (hidden by default) -->
+        <div id="myLinks">
+            <a href="Home.html">Home</a>
+            <a href="Factura.html">Factura</a>
+            <a href="Productos.html">Productos</a>
+            <a href="Login.html">Login</a>
+            <a href="Factura.html">Factura</a>
+            <a href="Rutero.html">Rutero</a>
+            <a href="Almacenes.html">Almacenes</a>
+        </div>
+        <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
+      
+      <!-- Content page -->
+      <div class="container" style="text-align:center">
+          <h2><strong>Manual de Productos</strong></h2>
+          <p>Informacion cuando inspeccionamos los productos de una factura.</p>
+
+          <p><h3>En este caso nuestra forma de observar los datos de un producto es accediendo a los detalles de la factura. </h3></p>
+          <p>A la hora de añadir un producto a una factura debemos asegurarnos de que este producto ya existe anteriormente en Odoo.
+              Cuando modificamos cualquier dato dentro de una factura esta se actualiza de manera inmediata y actualiza su precio.
+          </p>
+          <p>Los campos bloqueados dentro de los productos son los que se autocompletan y no son necesarios determinar.</p>
+      </div>
+    
+</body>
+</html>
