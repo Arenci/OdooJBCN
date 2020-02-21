@@ -28,7 +28,7 @@ class AuthConfigTest {
 		auth.authenticate(username, password);
 		ProductBean a = new ProductBean();
 		String expected = "{\"status\":\"ok\"}";
-		String actual = a.deleteProductFromInvoice(2, 1);
+		String actual = a.deleteProductFromInvoice(2, 5);
 		assertEquals(expected, actual);
 	}
 	

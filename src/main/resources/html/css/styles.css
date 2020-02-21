@@ -4,6 +4,10 @@ body{
 .text-content{
 	text-align: justify;
 }
+.imagen{
+  height: 500px;
+  width: 1000px;
+}
 
 /* Style the navigation menu */
 .topnav {
